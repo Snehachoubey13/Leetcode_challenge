@@ -1,0 +1,77 @@
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.size() == 0) {
+            return NULL;
+        }
+
+        return mergeKListsHelper(lists, lists.size() - 1);
+    }
+
+    ListNode* mergeKListsHelper(vector<ListNode*>& lists, int last) {
+        // Merge lists until one list is left
+        while(last != 0) {
+            int i = 0, j = last;
+
+            while(i < j) {
+                // merge list i with list j
+                // store the merged result in list i
+                lists[i] = mergeLists(lists[i], lists[j]);
+
+                i++;
+                j--;
+
+                // update last when all pairs are merged
+                if(i >= j) {
+                    last = j;
+                }
+            }
+        }
+
+        return lists[0];
+    }
+
+    ListNode* mergeLists(ListNode* l1, ListNode* l2) {
+        ListNode* head = NULL;
+
+        // if any one of the two lists is empty
+        // return the other list.
+        if(l1 == NULL) {
+            return l2;
+        } else if(l2 == NULL) {
+            return l1;
+        }
+
+        // choose the head based on the smallest value of two lists.
+        if(l1->val < l2->val){
+            head = l1;
+            l1 = l1->next;
+        } else {
+            head = l2;
+            l2 = l2->next;
+        }
+
+        ListNode *p;
+        p = head;
+
+        while(l1 && l2){
+            if(l1->val < l2->val){
+                p->next = l1;
+                l1 = l1->next;
+            } else {
+                p->next = l2;
+                l2 = l2->next;
+            }
+
+            p = p->next;
+        }
+
+        if(l1 != NULL){
+            p->next = l1;
+        } else {
+            p->next = l2;
+        }
+
+        return head;
+    }
+};
