@@ -1,0 +1,28 @@
+class Solution {
+public:
+   int divide(int dividend, int divisor) {
+        if (dividend == divisor) {
+            return 1;
+        }
+
+        bool isPositive = (dividend < 0 == divisor < 0);
+        unsigned int absDividend = abs(dividend);
+        unsigned int absDivisor = abs(divisor);
+        unsigned int answer = 0;
+
+        while (absDividend >= absDivisor) {
+            int quotient = 0;
+            while (absDividend > (absDivisor << (quotient + 1)))
+                quotient++;
+
+            answer += (1 << quotient);
+
+            absDividend -= (absDivisor << quotient);
+        }
+
+        if (answer == (1 << 31) and isPositive)
+            return INT_MAX;
+
+        return isPositive ? answer : -answer;
+    }
+};
